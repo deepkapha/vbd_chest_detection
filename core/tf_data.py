@@ -4,21 +4,20 @@ data.py - module for data loading
 
 # import dependencies
 import os
-
-"""---------------tensorflow-data-loading-----------"""
 import pydicom
 import pandas as pd
-from sklearn.model_selection import train_test_split
 import tensorflow as tf
+from sklearn.model_selection import train_test_split
 
+# set random seeed
 tf.random.set_seed(2021)
 
-class VBD_TFDataset:
-	""" VBD_TFDataset - class for loading VinBigDataset """
+class VBD_Dataset:
+	""" VBD_Dataset - class for loading VinBigDataset """
 
 	def __init__(self, data, image_dir, seed = 2021):
 		"""
-		VBD_TFDataset class constructor
+		VBD_Dataset class constructor
 		Inputs:
 			- data : str or pandas.DataFrame
 				Dataframe (or path to dataframe) of image and labels
@@ -53,42 +52,3 @@ class VBD_TFDataset:
 			return self.process(train_image_ids), self.process(val_image_ids) 
 		else:
 			return self.process(self.image_ids)
-
-"""---------------pytorch-data-loading-------------"""
-"""
-import torch
-import torchvision
-
-from torch.utils.data import DataLoader, Dataset
-from torch.utils.data.sampler import SequentialSampler
-
-class VBD_Dataseet(Dataset):
-	"""
-	VBD_Dataset - class for loading VinBigDataset
-	"""
-
-	def __init__(self, data, image_dir, transforms = None):
-		"""
-		VBD_Dataset class constructor
-		Inputs:
-			- data : str or pandas.DataFrame
-				DataFrame (or path to dataframe) of image and labels
-			- image_dir : str
-				path to image directory
-			- transforms : to be added
-		"""
-		super().__init__()
-
-		# parse arguments
-		self.data = pd.read_csv(data) if isinstance(data, str) else data 
-		self.image_ids = self.data['image_id'].unique()
-		self.image_dir = image_dir
-		self.transforms = transforms
-
-	def __getitem__(self, index):
-		image_id = self.image_ids[index]
-		records = selfdata[self.data['image_id'] == image_id]
-		records = records.reset_index(drop = True)
-
-		dicom = pydicom.
-"""
