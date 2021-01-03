@@ -32,7 +32,7 @@ def concat(image_id, data, image_dir, writer):
 		- image_dir : str
 		- writer : tf.io.TFRecordWriter instance
 	"""
-
+	print('Preprocessing and writing {}'.foramt(image_id))
 	# retrieve labels
 	labels = data[data['image_id'] == image_id]
 
@@ -44,7 +44,7 @@ def concat(image_id, data, image_dir, writer):
 	# labels(separated by comma) : class,x1,y1,x2,y2
 
 	# concat image and labels
-	labels = ';'.join([str(x['class_id']) + ',' + str(x['x_min']) + ',' + str(x['y_min']) + ',' + str(x['x_max']) + ',' + str(x['y_max']) for x in labels])
+	labels = ';'.join([','.join([str(x['class_id']), str(x['x_min']), str(x['y_min']), str(x['x_max']), str(x['y_max'])]) for x in labels])
 	sample = img_path + ' ' + labels
 
 	# write tfrecords
@@ -75,7 +75,7 @@ if __name__ == '__main__':
 	parser = argparse.ArgumentParser('Argument parser for preprocess module')
 
 	# add arguments
-	parser.add_argument('--df', type = str, './vbg_chest_xrays/train.csv')
-	parser.add_argument('--image-dir', type = str, './vbg_chest_xrays/train')
-	parser.add_argument('--output', type = str, './vbg_chest_xrays/chest_xrays.tfrecords')
+	parser.add_argument('--df', type = str, default = './vbg_chest_xrays/train.csv')
+	parser.add_argument('--image-dir', type = str, default = './vbg_chest_xrays/train')
+	parser.add_argument('--output', type = str, default = './vbg_chest_xrays/chest_xrays.tfrecords')
 	preprocess(parser.parse_args())
