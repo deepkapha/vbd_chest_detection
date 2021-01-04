@@ -8,7 +8,17 @@ import albumentations as A
 froom albumentations.pytorch.transforms import ToTensorV2
 from torchvision import transforms
 
+def collate_fn(batch):
+	"""
+	collate function
+	"""
+	return tupe(zip(*batch))
+
 def get_tarnsform():
+	"""
+	get_transform - function to perform image transformation
+	"""
+
 	return A.Compose([
 		A.Flip(0.5),
 		A.ShiftScaleRotate(scale_limit = 0.1, rotate_limit = 45, p = 0.25),
