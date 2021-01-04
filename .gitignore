@@ -130,3 +130,4 @@ dmypy.json
 
 **/*.zip
 **/vbd_chest_xrays
+**/*.*.swp
