@@ -4,7 +4,7 @@ VinBigData Chest X-ray Abnormalities Detection
 ## Download data
 I assumed that you have Kaggle API setup successfully.
 ```
-kaggle competitions download -c vinbigdata-chest-xray-abnormalities-detection
+bash download_data.sh
 ```
 
 ## Instructions

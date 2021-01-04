@@ -129,3 +129,5 @@ dmypy.json
 .pyre/
 
 **/*.zip
+**/vbd_chest_xrays
+**/*.*.swp
