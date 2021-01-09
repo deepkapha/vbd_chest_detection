@@ -1,4 +1,4 @@
-""'
+"""
 torch_data.py - module for Torch data loading pipeline
 """
 
@@ -13,44 +13,48 @@ import torchvision
 from torch.utils.data import Dataset
 from torch.utils.data.sampler import SequentialSampler
 
-class VBD_Dataseet(Dataset):
-        """
-        VBD_Dataset - class for loading VinBigDataset
-        """
+class VBD_Dataset(Dataset):
+	"""
+	VBD_Dataset - class for loading VinBigDataset
+	"""
 
-        def __init__(self, data, image_dir, transforms = None):
-                """
-                VBD_Dataset class constructor
-                Inputs:
-                        - data : str or pandas.DataFrame
-                                DataFrame (or path to dataframe) of image and labels
-                        - image_dir : str
-                                path to image directory
-                        - transforms : to be added
-                """
-                super().__init__()
+	def __init__(self, data, image_dir, transforms = None):
+		"""
+		VBD_Dataset class constructor
+		Inputs:
+			- data : str or pandas.DataFrame
+				DataFrame (or path to dataframe) of image and labels
+			- image_dir : str
+				path to image directory
+			- transforms : to be added
+		"""
+		super().__init__()
 
-                # parse arguments
-                self.data = pd.read_csv(data) if isinstance(data, str) else data
-                self.image_ids = self.data['image_id'].unique()
-                self.image_dir = image_dir
-                self.transforms = transforms
+		# parse arguments
+		self.data = pd.read_csv(data) if isinstance(data, str) else data
+		# fill no findings with mins = 0 and max = 1.0
+		self.data.fillna(0, inplace = True)
+		self.data.loc[self.data['class_id'] == 14, ['x_max', 'y_max']] = 1.0
 
-        def __getitem__(self, index):
+		self.image_ids = self.data['image_id'].unique()
+		self.image_dir = image_dir
+		self.transforms = transforms
+
+	def __getitem__(self, index):
 		# retrieve labels
-                image_id = self.image_ids[index]
-                records = selfdata[self.data['image_id'] == image_id]
-                records = records.reset_index(drop = True)
+		image_id = self.image_ids[index]
+		records = self.data[self.data['image_id'] == image_id]
+		records = records.reset_index(drop = True)
 
 		# read image
-		dicom = pydicom.dcmread(f"{self.image_dir}/{image_id}.dicom")
+		dicom = pydicom.dcmread('{}/{}.dicom'.format(self.image_dir, image_id))
 		image = dicom.pixel_array
 
 		if 'PhotometricIntepretation' in dicom:
-			if dicom.PhotometricInterpretation == 'MONOCHROME1":
+			if dicom.PhotometricInterpretation == 'MONOCHROME1':
 				image = np.max(image) - image
 		intercept = dicom.RescaleIntercept if 'RescaleIntercept' in dicom else 0.0
-		slope = dicon.RescaleSlope if 'RescaleSlope' in dicom else 1.0
+		slope = dicom.RescaleSlope if 'RescaleSlope' in dicom else 1.0
 
 		if slope != 1:
 			image = slope * image.astype(np.float64)
