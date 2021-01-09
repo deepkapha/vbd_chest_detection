@@ -5,16 +5,16 @@ torch_utils.py - module for image transform
 # import depedencies
 import os
 import albumentations as A
-froom albumentations.pytorch.transforms import ToTensorV2
+from albumentations.pytorch.transforms import ToTensorV2
 from torchvision import transforms
 
 def collate_fn(batch):
 	"""
 	collate function
 	"""
-	return tupe(zip(*batch))
+	return tuple(zip(*batch))
 
-def get_tarnsform():
+def get_transform():
 	"""
 	get_transform - function to perform image transformation
 	"""
@@ -25,6 +25,6 @@ def get_tarnsform():
 		A.LongestMaxSize(max_size = 800, p = 1.0),
 		
 		# normalization in FasterRCNN
-		A.Normalize(mean = (0,0,0), std = (1,1,1), max_pixel_value = 255.0, p = 1.0,
-		ToTensorV2(p = 1.0))],
+		A.Normalize(mean = (0,0,0), std = (1,1,1), max_pixel_value = 255.0, p = 1.0),
+		ToTensorV2(p = 1.0)],
 			bbox_params = {'format' : 'pascal_voc', 'label_fields' : ['labels']})
